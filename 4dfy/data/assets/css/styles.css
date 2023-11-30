@@ -461,19 +461,21 @@ h6 {
         padding-right: 4px;
     }
 }
-
-.authors {
-    padding-bottom: 10px;
+.affiliations {
+    font-size: 15px;
+    text-align: center;
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 20px;
 }
-.authors .col-sm-3 {
-    padding: 0;
+.authors { text-align: center; }
+.authors a {
+    display: inline-block;
+    font-size: 20px;
+    padding: 5px;
 }
-.authors h5 {
-    font-size: 24px;
-    font-weight: 300;
-}
-.authors h5 {
-    font-size: 18px;
+.authors sup {
+    color: #313436;
 }
 
 .shadowed_text {
