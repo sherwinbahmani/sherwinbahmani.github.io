@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    </script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>TC4D: Trajectory-Conditioned Text-to-4D Generation</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,500,600' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="data/assets/css/Highlight-Clean.css">
+    <link rel="stylesheet" href="data/assets/css/styles.css">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="data/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="data/favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="robots" content="noindex">
+
+    <meta property="og:site_name" content="TC4D" />
+    <meta property="og:type" content="video.other" />
+    <meta property="og:title" content="TC4D: Trajectory-Conditioned Text-to-4D Generation" />
+    <meta property="og:description" content="TC4D: Trajectory-Conditioned Text-to-4D Generation." />
+    <meta property="og:url" content="" />
+
+</head>
+
+<body>
+    <div class="highlight-clean" style="padding-bottom: 0px; padding-top: 20px;">
+        <div class="container" style="max-width: 1024px; margin-bottom: 20px">
+            <h1 class="text-center" style="font-size:35px;"><b>TC4D</b>: Trajectory-Conditioned Text-to-4D Generation</h1>
+        </div>
+        <div class="container" style="max-width: 1024px; margin-bottom: 20px;">
+            <div class="authors">
+                <a href=https://sherwinbahmani.github.io/>
+                    Sherwin Bahmani<sup>*1,2,3</sup>
+                </a>&nbsp;
+                <a href=https://alvinliu0.github.io/>
+                Xian Liu<sup>*4</sup>
+                </a>&nbsp;
+                <a href=https://yifita.netlify.app/>
+                Yifan Wang<sup>*5</sup>
+                </a>&nbsp;
+                <a href=https://universome.github.io/>
+                Ivan Skorokhodov<sup>3</sup>
+                </a>&nbsp;
+                <a href=https://www.lessvrong.com/>
+                Victor Rong<sup>1,2</sup>
+                </a>&nbsp;
+                <a href=https://liuziwei7.github.io/>
+                Ziwei Liu<sup>6</sup>
+                </a>&nbsp;
+                <a href=https://xh-liu.github.io/>
+                Xihui Liu<sup>7</sup>&nbsp;
+                </a>
+                <br>
+            </div>
+            <div class="authors">
+                <a href=https://jjparkcv.github.io/>
+                Jeong Joon Park<sup>8</sup>
+                </a>&nbsp;
+                <a href=http://www.stulyakov.com/>
+                Sergey Tulyakov<sup>3</sup>
+                </a>&nbsp;
+                <a href=https://web.stanford.edu/~gordonwz/>
+                Gordon Wetzstein<sup>5</sup>
+                </a>&nbsp;
+                <a href=https://taiya.github.io/>
+                Andrea Tagliasacchi<sup>1,9,10</sup>
+                </a>&nbsp;
+                <a href=https://davidlindell.com/>
+                David B. Lindell<sup>1,2</sup>
+                </a>&nbsp;     
+            </div>
+            <div class="affiliations">
+                <span><sup>1</sup> University of Toronto </span>
+                <span><sup>2</sup> Vector Institute </span>
+                <span><sup>3</sup> Snap Inc. </span>
+                <span><sup>4</sup> CUHK </span>
+                <span><sup>5</sup> Stanford University </span>
+                <span><sup>6</sup> NTU </span>
+                <span><sup>7</sup> HKU </span>
+                <span><sup>8</sup> University of Michigan </span>
+                <span><sup>9</sup> SFU </span>
+                <span><sup>10</sup> Google </span>
+            </div>
+            <div class="affiliations">
+                <span><sup>*</sup> equal contribution </span>
+            </div>
+            <div class="container" style="max-width: 1024px; margin-bottom: 20px">
+                <h1 class="text-center" style="font-size:22px;">arXiv 2024</h1>
+            </div>
+        </div>
+        <div id="container">
+        <div class="buttons" style="margin-top: 8px; margin-bottom: 8px;">
+            <a class="btn btn-light" role="button" href="https://arxiv.org/abs/2311.17984">
+                <svg style="width:24px;height:24px;margin-left:-12px;margin-right:12px" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M16 0H8C6.9 0 6 .9 6 2V18C6 19.1 6.9 20 8 20H20C21.1 20 22 19.1 22 18V6L16 0M20 18H8V2H15V7H20V18M4 4V22H20V24H4C2.9 24 2 23.1 2 22V4H4M10 10V12H18V10H10M10 14V16H15V14H10Z"></path>
+                </svg>Paper
+            </a>
+            <a class="btn btn-light" role="button" href="https://github.com/sherwinbahmani/tc4d">
+                <svg xmlns="http://www.w3.org/2000/svg" style="width:24px;height:24px;margin-left:-12px;margin-right:12px" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 
+                            1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 
+                            3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 
+                            2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path>
+                </svg>
+                Code
+            </a>
+            <a class="btn btn-light" role="button" href="gallery.html">
+                <svg style="width:24px;height:24px;margin-left:-12px;margin-right:12px" width="24px" height="24px" viewBox="0 0 375 531">
+                    <polygon stroke="#000000" points="0.5,0.866 459.5,265.87 0.5,530.874 "></polygon>
+                </svg>
+                Gallery
+            </a>
+        </div>
+        </div>
+    </div>
+    <hr class="divider" />
+    <div class="container" style="max-width: 768px;">
+        <div class="compositional captioned_videos">
+            <video class="video lazy" autoplay loop playsinline muted>
+                <source data-src="data/videos/teaser.mp4" type="video/mp4"></source>
+            </video>
+        </div>
+    </div>
+    <hr class="divider" />
+    <div class="container" style="max-width: 768px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h2>Abstract</h2>
+                    </div>
+                </div>
+                <p>
+                    Recent techniques for text-to-4D generation synthesize dynamic 3D scenes using supervision from pre-trained text-to-video models. However, existing representations for motion, such as deformation models or time-dependent neural representations, are limited in the amount of motion they can generate-they cannot synthesize motion extending far beyond the bounding box used for volume rendering. The lack of a more flexible motion model contributes to the gap in realism between 4D generation methods and recent, near-photorealistic video generation models. Here, we propose TC4D: trajectory-conditioned text-to-4D generation, which factors motion into global and local components. We represent the global motion of a scene bounding box using rigid transformation along a spline, and we learn local deformations that conform to the global trajectory using supervision from a text-to-video model. Our approach enables the synthesis of scenes animated along arbitrary trajectories, compositional scene generation, and significant improvements to the realism and amount of generated motion, which we evaluate qualitatively and through a user study. 
+                </p>
+            </div>
+        </div>
+    </div>
+    <hr class="divider" />
+    <div class="container" style="max-width: 768px;">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>Method</h2>
+            </div>
+        </div>
+        <div class="row captioned_videos">
+            <div class="col-md-12">
+                <p>
+                    Our method takes as input a pre-trained 3D scene generated using supervision from a 2D and/or 3D diffusion model. We animate the scene through a decomposition of motion at global and local scales. Motion at the global scale is incorporated via rigid transformation of the bounding box containing the object representation along a given spline trajectory at steps t. We align local motion to the trajectory by optimizing a separate deformation model that warps the underlying volumetric representation based on supervision from a text-to-video model. The output is an animated 3D scene with motion that is more realistic and greater in magnitude than previous techniques.
+                </p>
+                &nbsp;
+                <img src="data/method.png" alt="architecture" style="width: 100%">
+            </div>
+        </div>
+    </div>
+    <hr class="divider" />
+    <div class="container" style="max-width: 768px;">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>Compositional Text-to-4D Generation</h2>
+            </div>
+        </div>
+        <div class="row captioned_videos">
+            <div class="col-6">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="t0" loop playsinline autoPlay muted src="data/videos/ours/comp0.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">a bear walking, an astronaut riding a horse, deadpool riding a cow, a firepit</h6>
+            </div>
+            <div class="col-6">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="t1" loop playsinline autoPlay muted src="data/videos/ours/comp1.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">a giraffe walking, an elephant walking</h6>
+            </div>
+        </div>
+        <div class="row captioned_videos">
+            <div class="col-6">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="t2" loop playsinline autoPlay muted src="data/videos/ours/comp2.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">a deer walking, a tiger walking, assassin riding a cow, a rhinoceros walking, water spraying out of a firehydrant</h6>
+            </div>
+            <div class="col-6">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="t3" loop playsinline autoPlay muted src="data/videos/ours/comp3.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">a goat walking, a sheep running, a seagull flying, a lamppost</h6>
+            </div>
+        </div>
+    </div>
+    <hr class="divider" />
+    <div class="container" style="max-width: 768px;">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>Trajectory-Conditioned Text-to-4D Generation</h2>
+            </div>
+        </div>
+        <div class="row captioned_videos">
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex3" loop playsinline autoPlay muted src="data/videos/ours/a_deer_walking.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">a deer walking</h6>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex4" loop playsinline autoPlay muted src="data/videos/ours/a_dog_riding_a_skateboard.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">a dog riding a skateboard</h6>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex16" loop playsinline autoPlay muted src="data/videos/ours/batman_riding_a_camel.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">batman riding a camel</h6>
+            </div>
+        </div>
+        <div class="row captioned_videos">
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex6" loop playsinline autoPlay muted src="data/videos/ours/a_lion_walking.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">a lion walking</h6>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex7" loop playsinline autoPlay muted src="data/videos/ours/a_rhinoceros_walking.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">a rhinoceros walking</h6>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex8" loop playsinline autoPlay muted src="data/videos/ours/a_seagull_flying.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">a seagull flying</h6>
+            </div>
+        </div>
+        <div class="row captioned_videos">
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex9" loop playsinline autoPlay muted src="data/videos/ours/a_shark_swimming.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">a shark swimming</h6>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex16" loop playsinline autoPlay muted src="data/videos/ours/assassin_riding_a_cow.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">assassin riding a cow</h6>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex17" loop playsinline autoPlay muted src="data/videos/ours/deadpool_riding_a_cow.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">deadpool riding a cow</h6>
+            </div>
+        </div>
+        <div class="row captioned_videos">
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex18" loop playsinline autoPlay muted src="data/videos/ours/son_goku_riding_an_elephant.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">son goku riding an elephant</h6>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex13" loop playsinline autoPlay muted src="data/videos/ours/a_tiger_walking.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">a tiger walking</h6>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex14" loop playsinline autoPlay muted src="data/videos/ours/a_fox_walking.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">an fox walking</h6>
+            </div>
+        </div>
+        <div class="row captioned_videos">
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex18" loop playsinline autoPlay muted src="data/videos/ours/a_cat_walking.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">a cat walking</h6>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex19" loop playsinline autoPlay muted src="data/videos/ours/spiderman_riding_a_donkey.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">spiderman riding a donkey</h6>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex20" loop playsinline autoPlay muted src="data/videos/ours/a_clown_fish_swimming.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">a clown fish swimming</h6>
+            </div>
+        </div>
+        <div class="col-sm-4 my-auto center" style="margin-left:auto; margin-right: auto;">
+            <a href="gallery.html" class="btn btn-primary btn-lg btn-search">
+                All Results
+            </a>
+        </div>
+    </div>
+
+    <hr class="divider" />
+    <div class="container" style="max-width: 768px;">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>Comparisons with DreamGaussian4D and 4D-fy</h2>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 0px;">
+            <div class="col-xs-33 compare-title  compare-title-sm">
+                <p>DreamGaussian4D + Trajectory</p>
+            </div>
+            <div class="col-xs-33 compare-title  compare-title-sm">
+                <p>4D-fy + Trajectory</p>
+            </div>
+            <div class="col-xs-33 compare-title">
+                <p>Ours</p>
+            </div>
+        </div>
+        <div class="row captioned_videos">
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="4dfy00" loop playsinline autoPlay muted src="data/videos/dreamgaussian/a_sheep_running.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="4dfy0" loop playsinline autoPlay muted src="data/videos/4dfy/a_sheep_running.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="4dfy1" loop playsinline autoPlay muted src="data/videos/ours/a_sheep_running.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+            </div>
+            <h6 class="caption">a sheep running</h6>
+        </div>
+        <div class="row captioned_videos">
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="4dfy000" loop playsinline autoPlay muted src="data/videos/dreamgaussian/a_camel_walking.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="4dfy2" loop playsinline autoPlay muted src="data/videos/4dfy/a_camel_walking.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="4dfy3" loop playsinline autoPlay muted src="data/videos/ours/a_camel_walking.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+            </div>
+            <h6 class="caption">a camel walking</h6>
+        </div>
+        <div class="row captioned_videos">
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="4dfy0000" loop playsinline autoPlay muted src="data/videos/dreamgaussian/an_astronaut_riding_a_horse.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="4dfy8" loop playsinline autoPlay muted src="data/videos/4dfy/an_astronaut_riding_a_horse.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="4dfy9" loop playsinline autoPlay muted src="data/videos/ours/an_astronaut_riding_a_horse.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+            </div>
+            <h6 class="caption">an astronaut riding a horse</h6>
+        </div>
+        <div class="row captioned_videos">
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="4dfy00000" loop playsinline autoPlay muted src="data/videos/dreamgaussian/a_hippo_walking.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="4dfy4" loop playsinline autoPlay muted src="data/videos/4dfy/a_hippo_walking.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="4dfy5" loop playsinline autoPlay muted src="data/videos/ours/a_hippo_walking.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+            </div>
+            <h6 class="caption">a hippo walking</h6>
+        </div>
+    </div>
+    <hr class="divider" />
+    <div class="container" style="max-width: 768px;">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>Trajectory + Scale</h2>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 0px;">
+            <div class="col-xs-33 compare-title  compare-title-sm">
+                <p>w/o trajectory, w/o scale</p>
+            </div>
+            <div class="col-xs-33 compare-title">
+                <p>w/ trajectory, w/o scale</p>
+            </div>
+            <div class="col-xs-33 compare-title">
+                <p>w/ trajectory, w/ scale</p>
+            </div>
+        </div>
+        <div class="row captioned_videos">
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex3" loop playsinline autoPlay muted src="data/videos/ours/a_flame_getting_larger_0.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex4" loop playsinline autoPlay muted src="data/videos/ours/a_flame_getting_larger_1.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+                <h6 class="caption">a flame getting larger</h6>
+            </div>
+            <div class="col-4">
+                <div class="video-compare-container" style="width: 100%">
+                    <video class="video lazy" id="ex16" loop playsinline autoPlay muted src="data/videos/ours/a_flame_getting_larger_2.mp4" onplay="resizeAndPlay(this)"></video>
+                </div>
+            </div>
+        </div>
+
+    <hr class="divider" />
+    <div class="container" style="max-width: 768px;">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Citation</h2>
+                <code>
+                    @article{bah2024tc4d,<br>
+                    &nbsp; author = {Bahmani, Sherwin and Liu, Xian and Yifan, Wang and Skorokhodov, Ivan and Rong, Victor and Liu, Ziwei and Liu, Xihui and Park, Jeong Joon and Tulyakov, Sergey and Wetzstein, Gordon and Tagliasacchi, Andrea and Lindell, David B.},<br>
+                    &nbsp; title  = {TC4D: Trajectory-Conditioned Text-to-4D Generation},<br>
+                    &nbsp; journal = {arXiv},<br>
+                    &nbsp; year   = {2024},<br>
+                }</code></div>
+        </div>
+    </div>
+    <hr class="divider" />
+    <div class="container" style="max-width: 768px;">
+        <footer>
+            <p> Website template from <a href="https://dreamfusion3d.github.io/">DreamFusion</a> and <a href="https://mv-dream.github.io/">MVDream</a> . We thank the authors for the open-source code.</p>
+        </footer>
+    </div>
+    <script src="data/assets/js/yall.js"></script>
+    <script>
+        yall(
+            {
+                observeChanges: true
+            }
+        );
+    </script>
+</body>
+
+</html>
